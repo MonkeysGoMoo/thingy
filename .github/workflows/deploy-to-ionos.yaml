@@ -79,9 +79,13 @@ jobs:
 
       - name: Render real site-url to all files
         run: |
-          for file in `grep -rl 'https://IONOS_DEPLOY_NOW_SITE_URL' .`; do
-            sed -i $file -e 's|https://IONOS_DEPLOY_NOW_SITE_URL|${{ fromJson(steps.deployment.outputs.info).site-url }}|g'
-          done
+          # Handle filenames with spaces/newlines by using a NUL-delimited list.
+          grep -rlZ 'https://IONOS_DEPLOY_NOW_SITE_URL' . \
+            --exclude-dir=.git --exclude-dir=.github --exclude-dir=node_modules \
+          | while IFS= read -r -d '' file; do
+              sed -i "s|https://IONOS_DEPLOY_NOW_SITE_URL|${{ fromJson(steps.deployment.outputs.info).site-url }}|g" "$file"
+              echo "Patched: $file"
+            done
 
       - name: Render SSH user secret name
         run: echo SSH_USERNAME_SECRET=IONOS_DEPLOYMENT_`echo ${{ matrix.deployment-id }} | tr '[:lower:]' '[:upper:]' | tr '-' '_'`_SSH_USERNAME >> $GITHUB_ENV
