@@ -1,0 +1,290 @@
+/*
+ * Stylesheet for E.Z.A.F. Tutoring
+ *
+ * This file defines a modern, approachable look. Colours and spacing match the
+ * branding from the original flyer while remaining responsive and accessible.
+ * CSS variables allow easy tweaking of the palette. At the bottom of the
+ * file you will find custom styles for the embedded PDF viewer and the
+ * document picker.
+ */
+
+/* Colour palette */
+:root {
+    --color-primary: #4b39b3;   /* deep purple for primary calls to action */
+    --color-secondary: #6f6af5; /* lighter purple for highlights */
+    --color-accent: #b6baf7;    /* pale purple accent */
+    --color-text-dark: #1b1c3e; /* dark blue-grey for body text */
+    --color-text-light: #ffffff; /* white for text on dark backgrounds */
+    --color-background: #f9f9fc; /* off-white backdrop */
+}
+
+/* Reset box sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Helvetica, Arial, sans-serif;
+    color: var(--color-text-dark);
+    background-color: var(--color-background);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Hero section */
+.hero {
+    position: relative;
+    height: 90vh;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text-light);
+    /* Dark overlay on top of the banner image for legibility */
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('banner.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0 2rem;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--color-secondary);
+}
+
+/* General section styling */
+section {
+    padding: 4rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Grid background reminiscent of the printed flyer */
+.about-section,
+.services-section,
+.pricing-section,
+.about-section#resources,
+.contact-section {
+    background-image: repeating-linear-gradient(
+            to right,
+            #e6e7f0 0px,
+            #e6e7f0 1px,
+            transparent 1px,
+            transparent 80px
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            #e6e7f0 0px,
+            #e6e7f0 1px,
+            transparent 1px,
+            transparent 80px
+        );
+}
+
+/* Service grid */
+.service-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.service-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 280px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.service-card h3 {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.service-card p {
+    font-size: 0.95rem;
+    color: #333333;
+}
+
+/* Pricing section */
+.pricing-section {
+    text-align: center;
+}
+
+.pricing-card {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    max-width: 360px;
+    margin: 2rem auto 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.pricing-card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.pricing-card p {
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+/* Contact section */
+.contact-section {
+    text-align: center;
+}
+
+.contact-section a {
+    font-weight: 600;
+}
+
+/* Footer */
+footer {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    text-align: center;
+    padding: 1rem 1.5rem;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* PDF viewer container and frame */
+.pdf-viewer-container {
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    border: 1px solid #dcdce8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.pdf-frame {
+    width: 100%;
+    height: 700px;
+    border: none;
+}
+
+/* Document picker styles */
+.pdf-picker {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto 1.5rem;
+    max-width: 900px;
+}
+
+.pdf-picker select {
+    min-width: 260px;
+    padding: 8px 10px;
+    border: 1px solid #dcdce8;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--color-text-dark);
+    font-size: 0.95rem;
+}
+
+.pdf-picker a.view-link {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #dcdce8;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+.pdf-picker a.view-link:hover {
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+}
+
+.pdf-picker small {
+    opacity: 0.7;
+    font-size: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero {
+        height: 70vh;
+    }
+    .hero-content h1 {
+        font-size: 2.4rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+    .service-card {
+        width: 100%;
+        max-width: 340px;
+    }
+    .service-grid {
+        gap: 1rem;
+    }
+}
