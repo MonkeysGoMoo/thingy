@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>EZAF PDF Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg:#ffffff; --panel:#f4f4fb; --ink:#1b1c3e; --muted:#667085;
+      --btn:#ffffff; --bd:#dcdce8; --accent:#3b82f6;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      display:flex;flex-direction:column;background:var(--bg);color:var(--ink);
+      font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif
+    }
+    .toolbar{
+      position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+      padding:10px;background:var(--panel);border-bottom:1px solid var(--bd)
+    }
+    .badge{font-weight:700;color:var(--accent);margin-right:6px}
+    .toolbar .spacer{flex:1}
+    .toolbar button,.toolbar input,.toolbar select,.toolbar a{
+      background:var(--btn);color:var(--ink);border:1px solid var(--bd);border-radius:6px;
+      padding:6px 10px;text-decoration:none;cursor:pointer;
+    }
+    .toolbar input[type="number"]{width:4.5rem}
+    .label{color:var(--muted)}
+    #viewer{
+      flex:1;overflow:auto;display:flex;justify-content:center;align-items:flex-start;gap:18px;padding:18px;
+      background:
+        linear-gradient(#ffffff,#ffffff) padding-box,
+        repeating-linear-gradient(0deg,#ececf7 0 1px,transparent 1px 80px),
+        repeating-linear-gradient(90deg,#ececf7 0 1px,transparent 1px 80px);
+    }
+    canvas{
+      background:#fbfbff;border:1px solid var(--bd);border-radius:8px;
+      box-shadow:0 6px 24px rgba(0,0,0,.08);display:block
+    }
+    .err{color:#b42318;background:#ffefef;border:1px solid #ffd4d4;padding:10px 14px;border-radius:8px}
+    @media (max-width: 640px){ .toolbar{gap:6px} .toolbar .spacer{display:none} }
+  </style>
+
+  <script type="module">
+    import * as pdfjs from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.mjs";
+    pdfjs.GlobalWorkerOptions.workerSrc =
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.worker.mjs";
+
+    const qs = new URLSearchParams(location.search);
+    const rawParam = qs.get("file") || "";
+    const fileUrl = decodeURIComponent(rawParam); // decode encoded path like %2Fpdfs%2Ffile.pdf
+
+    const el = (t, p={}, ...k) => { const e=document.createElement(t); Object.assign(e,p); k.forEach(x=>e.append(x)); return e; };
+    const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+    const bar = el("div",{className:"toolbar"});
+    const mark = el("span",{className:"badge",textContent:"EZAF Viewer"});
+    const prev = el("button",{textContent:"← Prev"});
+    const next = el("button",{textContent:"Next →"});
+    const pageIn = el("input",{type:"number",min:"1",value:"1"});
+    const total = el("span",{className:"label",textContent:"/ ?"});
+    const scaleSel = el("select");
+    [["page-width","Fit width"],["page-fit","Fit page"],["actual","Actual size"],
+     ["75","75%"],["100","100%"],["125","125%"],["150","150%"],["200","200%"]]
+     .forEach(([v,t])=>scaleSel.append(el("option",{value:v,textContent:t})));
+    scaleSel.value="page-width";
+    const zOut=el("button",{textContent:"−"});
+    const zIn=el("button",{textContent:"+"});
+    const rotateBtn=el("button",{textContent:"⟳ Rotate"});
+    const fullBtn=el("button",{textContent:"⤢ Fullscreen"});
+    const spacer=el("div",{className:"spacer"});
+    const openRaw=el("a",{id:"openRaw",textContent:"Open in new tab",target:"_blank",rel:"noopener",href:fileUrl||"#"});
+    bar.append(mark,prev,next,pageIn,total,scaleSel,zOut,zIn,rotateBtn,fullBtn,spacer,openRaw);
+    document.addEventListener("DOMContentLoaded",()=>document.body.prepend(bar));
+
+    const viewer=el("div",{id:"viewer"});
+    const canvas=el("canvas");
+    const ctx=canvas.getContext("2d",{alpha:false});
+    viewer.append(canvas);
+    document.addEventListener("DOMContentLoaded",()=>document.body.append(viewer));
+
+    let pdfDoc=null,page=1,rotation=0,zoomMode="page-width";
+    const ZMIN=0.2,ZMAX=6.0;
+
+    function computeScale(vp1){
+      const cw=Math.min(viewer.clientWidth||window.innerWidth,window.innerWidth)-36;
+      const ch=(viewer.clientHeight||window.innerHeight)-160;
+      switch(zoomMode){
+        case"page-width":return clamp(cw/vp1.width,ZMIN,ZMAX);
+        case"page-fit":return clamp(Math.min(cw/vp1.width,ch/vp1.height),ZMIN,ZMAX);
+        case"actual":return 1.0;
+        default:{const n=Number(zoomMode);return clamp(Number.isFinite(n)&&n>0?n/100:1.0,ZMIN,ZMAX);}
+      }
+    }
+
+    async function render(){
+      if(!pdfDoc)return;
+      const p=await pdfDoc.getPage(page);
+      const rot=(p.rotate+rotation)%360;
+      const base=p.getViewport({scale:1,rotation:rot});
+      const dpr=Math.max(1,window.devicePixelRatio||1);
+      const scale=computeScale(base);
+      const vp=p.getViewport({scale:scale*dpr,rotation:rot});
+      canvas.width=Math.floor(vp.width);
+      canvas.height=Math.floor(vp.height);
+      canvas.style.width=Math.floor(vp.width/dpr)+"px";
+      canvas.style.height=Math.floor(vp.height/dpr)+"px";
+      await p.render({canvasContext:ctx,viewport:vp}).promise;
+      pageIn.value=String(page);
+      total.textContent=`/ ${pdfDoc.numPages}`;
+      prev.disabled=page<=1; next.disabled=page>=pdfDoc.numPages;
+    }
+
+    async function load(){
+      if(!fileUrl){ viewer.innerHTML='<div class="err">Missing ?file= parameter.</div>'; return; }
+      try{
+        const task=pdfjs.getDocument(fileUrl);
+        pdfDoc=await task.promise;
+        page=clamp(page,1,pdfDoc.numPages);
+        await render();
+      }catch(e){
+        console.error(e);
+        viewer.innerHTML='<div class="err">Could not load PDF. Check the file path.</div>';
+      }
+    }
+
+    prev.onclick=async()=>{if(page>1){page--;await render();}};
+    next.onclick=async()=>{if(page<pdfDoc.numPages){page++;await render();}};
+    pageIn.onchange=async()=>{const n=clamp(parseInt(pageIn.value||"1",10),1,pdfDoc?.numPages||1);if(n!==page){page=n;await render();}};
+    scaleSel.onchange=async()=>{zoomMode=scaleSel.value;await render();};
+    zIn.onclick=async()=>{zoomMode=String(Math.round(currentScalePct()*1.2));await render();syncScaleSel();};
+    zOut.onclick=async()=>{zoomMode=String(Math.round(currentScalePct()/1.2));await render();syncScaleSel();};
+    rotateBtn.onclick=async()=>{rotation=(rotation+90)%360;await render();};
+    fullBtn.onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.body.requestFullscreen();};
+    document.addEventListener("fullscreenchange",()=>{fullBtn.textContent=document.fullscreenElement?"⤢ Exit":"⤢ Fullscreen";});
+
+    function currentScalePct(){if(['page-width','page-fit','actual'].includes(zoomMode))return 100;const n=Number(zoomMode);return Number.isFinite(n)?n:100;}
+    function syncScaleSel(){const presets=['page-width','page-fit','actual','75','100','125','150','200'];scaleSel.value=presets.includes(zoomMode)?zoomMode:'actual';}
+
+    window.onkeydown=async e=>{
+      if(e.key==='+'||e.key==='='){zoomMode=String(Math.round(currentScalePct()*1.2));await render();syncScaleSel();}
+      if(e.key==='-'||e.key==='_'){zoomMode=String(Math.round(currentScalePct()/1.2));await render();syncScaleSel();}
+      if(e.key==='0'){zoomMode='actual';scaleSel.value='actual';await render();}
+      if(e.key==='ArrowRight'&&page<pdfDoc.numPages){page++;await render();}
+      if(e.key==='ArrowLeft'&&page>1){page--;await render();}
+    };
+    window.onresize=()=>{if(pdfDoc&&(zoomMode==='page-width'||zoomMode==='page-fit'))render();};
+    load();
+  </script>
+</head>
+<body></body>
+</html>
