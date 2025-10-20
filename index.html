@@ -1,166 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>E.Z.A.F. Tutoring | Learning Made Simple</title>
-    <!-- Core stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-    <style>
-        /* Fallback inline styling for critical rendering */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: #1b1c3e;
-            line-height: 1.6;
-            background-color: #fff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E.Z.A.F. Tutoring | Learning Made Simple</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #1b1c3e;
+      line-height: 1.6;
+      background-color: #fff;
+    }
 
-        /* PDF Viewer styling */
-        .pdf-viewer-container {
-            max-width: 900px;
-            margin: 0 auto 3rem;
-            border: 1px solid #dcdce8;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
+    .pdf-viewer-container {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      border: 1px solid #dcdce8;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
 
-        .pdf-frame {
-            width: 100%;
-            height: 700px;
-            border: none;
-        }
-    </style>
+    .pdf-frame {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- Hero section with a math-themed background and succinct tagline -->
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Learning&nbsp;Made&nbsp;Simple</h1>
-            <p>Personalized math &amp; science help for Grades&nbsp;9–12</p>
-            <a href="#contact" class="cta-button">Book Your Free Consultation</a>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Learning&nbsp;Made&nbsp;Simple</h1>
+      <p>Personalized math &amp; science help for Grades&nbsp;9–12</p>
+      <a href="#contact" class="cta-button">Book Your Free Consultation</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="about" class="about-section">
+      <h2>About Us</h2>
+      <p>
+        E.Z.A.F. Tutoring provides one-on-one support in math and the sciences (chemistry,
+        biology and physics) for high school students. Every session is thoughtfully
+        prepared around the student’s needs—lessons are planned in advance and
+        students enjoy an extra 30 minutes of free response time to tackle any
+        schoolwork they find challenging. Our goal is to build confidence and ensure
+        deep understanding, not just memorization.
+      </p>
+    </section>
+
+    <section id="services" class="services-section">
+      <h2>What We Offer</h2>
+      <div class="service-grid">
+        <div class="service-card">
+          <h3>Custom Lessons</h3>
+          <p>
+            Lessons are designed specifically for each student, including an
+            additional 30&nbsp;minutes of free responses for any schoolwork they don’t
+            understand.
+          </p>
         </div>
-    </header>
+        <div class="service-card">
+          <h3>Flexible Sessions</h3>
+          <p>
+            Need more practice on tough problems? Schedule an entire session of free
+            responses or tailor the structure to fit your learning style.
+          </p>
+        </div>
+        <div class="service-card">
+          <h3>Free Consultations</h3>
+          <p>
+            New students receive a free consultation to understand their goals and
+            learning gaps, plus complimentary practice sheets to reinforce their
+            skills.
+          </p>
+        </div>
+      </div>
+    </section>
 
-    <main>
-        <!-- About section introducing the tutoring firm -->
-        <section id="about" class="about-section">
-            <h2>About Us</h2>
-            <p>
-                E.Z.A.F. Tutoring provides one-on-one support in math and the sciences (chemistry,
-                biology and physics) for high school students. Every session is thoughtfully
-                prepared around the student’s needs—lessons are planned in advance and
-                students enjoy an extra 30 minutes of free response time to tackle any
-                schoolwork they find challenging. Our goal is to build confidence and ensure
-                deep understanding, not just memorization.
-            </p>
-        </section>
-
-        <!-- Services section outlining what the firm offers -->
-        <section id="services" class="services-section">
-            <h2>What We Offer</h2>
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>Custom Lessons</h3>
-                    <p>
-                        Lessons are designed specifically for each student, including an
-                        additional 30&nbsp;minutes of free responses for any schoolwork they don’t
-                        understand.
-                    </p>
-                </div>
-                <div class="service-card">
-                    <h3>Flexible Sessions</h3>
-                    <p>
-                        Need more practice on tough problems? Schedule an entire session of free
-                        responses or tailor the structure to fit your learning style.
-                    </p>
-                </div>
-                <div class="service-card">
-                    <h3>Free Consultations</h3>
-                    <p>
-                        New students receive a free consultation to understand their goals and
-                        learning gaps, plus complimentary practice sheets to reinforce their
-                        skills.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pricing section to highlight affordability and guarantee -->
-        <section id="pricing" class="pricing-section">
-            <h2>Affordable Pricing</h2>
-            <div class="pricing-card">
-                <h3>$30&nbsp;per&nbsp;session</h3>
-                <p>
-                    Each session includes 1.5&nbsp;hours of instruction and lesson planning.
-                    Enjoy personalised help at an accessible rate.
-                </p>
-                <p>100&nbsp;% satisfaction or your money back.</p>
-            </div>
-        </section>
-
-        <!-- Resources section with integrated PDF viewer -->
-        <section id="resources" class="about-section">
-            <h2>Resources & Materials</h2>
-            <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
-                View our downloadable resources, lesson samples, and information sheets directly below.
-            </p>
-            <div class="pdf-viewer-container">
-                <iframe id="pdfFrame" class="pdf-frame" title="EZAF PDF Viewer" allowfullscreen></iframe>
-            </div>
-        </section>
-
-        <!-- Contact section with ways to reach the tutor -->
-        <section id="contact" class="contact-section">
-            <h2>Get in Touch</h2>
-            <p>Call or text <a href="tel:+19055147522">(905)&nbsp;514-7522</a> to
-                schedule your first free session.</p>
-            <p>Email us anytime at 
-                <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a>
-                for general inquiries or lesson information.
-            </p>
-            <p>For technical assistance or platform-related issues, contact 
-                <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>.
-            </p>
-            <p>Located in Milton, Ontario. Serving students in person and online.</p>
-            <p>First session is free for new students.</p>
-        </section>
-    </main>
-
-    <!-- Footer with concise tagline -->
-    <footer>
+    <section id="pricing" class="pricing-section">
+      <h2>Affordable Pricing</h2>
+      <div class="pricing-card">
+        <h3>$30&nbsp;per&nbsp;session</h3>
         <p>
-            E.Z.A.F. Tutoring — Personalized math &amp; science help for Grades&nbsp;9–12.
-            Learning made simple.
+          Each session includes 1.5&nbsp;hours of instruction and lesson planning.
+          Enjoy personalised help at an accessible rate.
         </p>
-        <p>
-            Contact: <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a> |
-            Support: <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>
-        </p>
-    </footer>
+        <p>100&nbsp;% satisfaction or your money back.</p>
+      </div>
+    </section>
 
-    <script>
-        // Dynamically load the first PDF from manifest.json
-        fetch("pdfs/manifest.json")
-            .then(response => {
-                if (!response.ok) throw new Error("Manifest not found.");
-                return response.json();
-            })
-            .then(data => {
-                if (!data.items || data.items.length === 0) throw new Error("No items in manifest.");
-                const firstFile = data.items[0].file;
-                const encodedFile = encodeURIComponent(firstFile);
-                const viewerPath = `pdfjs/web/viewer.html?file=..${encodedFile}#zoom=page-width`;
-                document.getElementById("pdfFrame").src = viewerPath;
-            })
-            .catch(err => {
-                document.getElementById("pdfFrame").outerHTML =
-                    `<div style="color:#b42318;text-align:center;padding:20px;">
-                        Error loading PDF: ${err.message}
-                     </div>`;
-                console.error(err);
-            });
-    </script>
+    <section id="resources" class="about-section">
+      <h2>Resources & Materials</h2>
+      <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
+        View our downloadable resources, lesson samples, and information sheets directly below.
+      </p>
+      <div class="pdf-viewer-container">
+        <iframe id="pdfFrame" class="pdf-frame" title="EZAF PDF Viewer" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <h2>Get in Touch</h2>
+      <p>Call or text <a href="tel:+19055147522">(905)&nbsp;514-7522</a> to schedule your first free session.</p>
+      <p>Email us anytime at 
+        <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a>
+        for general inquiries or lesson information.
+      </p>
+      <p>For technical assistance or platform-related issues, contact 
+        <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>.
+      </p>
+      <p>Located in Milton, Ontario. Serving students in person and online.</p>
+      <p>First session is free for new students.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      E.Z.A.F. Tutoring — Personalized math &amp; science help for Grades&nbsp;9–12.
+      Learning made simple.
+    </p>
+    <p>
+      Contact: <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a> |
+      Support: <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>
+    </p>
+  </footer>
+
+  <script>
+    // Load the first PDF from manifest.json correctly
+    fetch("pdfs/manifest.json")
+      .then(res => {
+        if (!res.ok) throw new Error("Manifest not found");
+        return res.json();
+      })
+      .then(data => {
+        if (!data.items || data.items.length === 0)
+          throw new Error("No items in manifest");
+        
+        const firstFile = data.items[0].file;
+        // ensure absolute and encode only spaces/special chars, not slashes
+        const cleanPath = firstFile.startsWith("/") ? firstFile : "/" + firstFile;
+        const encoded = encodeURI(cleanPath);
+        const viewerPath = `pdfjs/web/viewer.html?file=${encoded}#zoom=page-width`;
+        document.getElementById("pdfFrame").src = viewerPath;
+      })
+      .catch(err => {
+        document.getElementById("pdfFrame").outerHTML =
+          `<div style="color:#b42318;text-align:center;padding:20px;">
+            Error loading PDF: ${err.message}
+          </div>`;
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
