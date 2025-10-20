@@ -88,17 +88,32 @@
       </div>
     </section>
 
-    <!-- Resources section with integrated PDF viewer -->
+    <!-- Resources section with integrated PDF viewer and picker -->
     <section id="resources" class="about-section">
       <h2>Resources &amp; Materials</h2>
       <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
-        View our downloadable resources, lesson samples, and information
-        sheets directly below.
+        View our downloadable resources, lesson samples, and information sheets below.
       </p>
-      <!-- A container for error messages if the manifest is missing -->
-      <div id="warn" class="note-warn" style="display:none;"></div>
+
+      <!-- Dropdown + action buttons to open and download files -->
+      <div class="pdf-picker">
+        <label for="pdfSelect">Select a file:</label>
+        <select id="pdfSelect" aria-label="Select a PDF to view"></select>
+        <a id="openBtn" class="view-link" target="_blank" rel="noopener">Open in new tab</a>
+        <a id="downloadBtn" class="view-link" download>Download</a>
+      </div>
+
+      <!-- Warning or info message placeholder -->
+      <div id="warn" class="note-warn" style="display:none; text-align:center; margin-bottom:10px;"></div>
+
+      <!-- Embedded PDF viewer; one instance only -->
       <div class="pdf-viewer-container">
-        <iframe id="pdfFrame" class="pdf-frame" title="EZAF PDF Viewer" allowfullscreen></iframe>
+        <iframe
+          id="pdfFrame"
+          class="pdf-frame"
+          title="EZAF PDF Viewer"
+          allowfullscreen>
+        </iframe>
       </div>
     </section>
 
@@ -119,99 +134,99 @@
     </section>
   </main>
 
-  <!-- Footer with a concise tagline and contact info -->
+  <!-- Footer with clear layout and contact links -->
   <footer>
-    <p>
-      E.Z.A.F. Tutoring — Personalized math &amp; science help for
-      Grades&nbsp;9–12. Learning made simple.
-    </p>
-    <p>
-      Contact: <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a> |
-      Support: <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>
-    </p>
+    <div class="footer-content">
+      <p class="footer-brand">
+        E.Z.A.F. Tutoring — Personalized math &amp; science help for Grades&nbsp;9–12.
+        Learning made simple.
+      </p>
+      <div class="footer-links">
+        <a href="mailto:pierreibrahim@ezaftutoring.com">Contact</a>
+        <a href="mailto:support@ezaftutoring.com">Support</a>
+      </div>
+    </div>
   </footer>
 
-  <!-- JavaScript to dynamically load the first PDF from the manifest -->
+  <!-- Single script to populate the dropdown and manage the PDF viewer -->
   <script>
     (function () {
+      const select = document.getElementById('pdfSelect');
       const frame = document.getElementById('pdfFrame');
+      const openBtn = document.getElementById('openBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
       const warn = document.getElementById('warn');
 
       /**
-       * Convert a PDF path into a URL-encoded absolute path for PDF.js.
-       * Ensure the path begins with a leading slash and encode all
-       * characters (including slashes) via encodeURIComponent so they
-       * become %2F and %20 etc. This form is what the viewer expects.
+       * Set the viewer to display the given PDF path. Ensure the path is
+       * absolute (prefixed with '/') and fully URL-encoded (including
+       * slashes). Also update the action links.
        *
-       * @param {string} path The raw path from the manifest.
-       * @returns {string} A fully encoded path ready for use in the
-       * query parameter.
+       * @param {string} path Raw relative or absolute PDF path.
        */
-      function toEncodedAbs(path) {
-        if (!path) return '';
-        // Prefix with a slash if necessary
-        // Ensure the path starts with a single slash.  If it already
-        // starts with '/', leave it unchanged. Otherwise, prefix it.
+      function setViewer(path) {
+        if (!path) return;
+        // Prefix with slash if necessary and remove duplicate slashes
         if (!path.startsWith('/')) {
-          path = '/' + path;
+          path = '/' + path.replace(/^\/+/,'');
         }
-        return encodeURIComponent(path);
+        const encoded = encodeURIComponent(path);
+        // Use the viewer.html at the root; file param expects encoded path
+        // The PDF viewer lives in the pdfjs directory. Use an absolute path
+        // so the file is always resolved correctly, regardless of nested directories.
+        frame.src = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
+        openBtn.href = path;
+        downloadBtn.href = path;
+        downloadBtn.download = path.split('/').pop() || 'file.pdf';
       }
 
       /**
-       * Set the PDF.js viewer iframe to load the specified PDF file.
-       * The viewer lives in the /pdfjs directory (viewer.html) and
-       * accepts the encoded file path in the query parameter.
-       *
-       * @param {string} pdfPath The raw path to the PDF (e.g.
-       * '/pdfs/Introduction to Integrals.pdf').
+       * Populate the select element with items from the manifest.
+       * @param {Array<{file:string,title?:string}>} items
        */
-      function setViewer(pdfPath) {
-        if (!pdfPath) return;
-        const encoded = toEncodedAbs(pdfPath);
-        const viewerUrl = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
-        frame.src = viewerUrl;
+      function populate(items) {
+        select.innerHTML = '';
+        items.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.file;
+          opt.textContent = item.title || (item.file || '').split('/').pop();
+          select.appendChild(opt);
+        });
       }
 
       /**
-       * Display an error message in the resources section and fall back
-       * to a default PDF. If the manifest fails to load, this function
-       * ensures the viewer still displays something meaningful.
-       *
-       * @param {string} reason A message describing the error.
+       * Display a warning message to the user.
+       * @param {string} msg
        */
-      function fallback(reason) {
+      function showWarn(msg) {
         warn.style.display = 'block';
-        warn.textContent = reason || 'Could not load /pdfs/manifest.json.';
-        // Try to load the Introduction to Integrals PDF if present
-        const defaultPath = '/pdfs/Introduction to Integrals.pdf';
-        setViewer(defaultPath);
+        warn.textContent = msg;
       }
 
-      // Fetch the manifest from the /pdfs folder and load the first item
+      // Load the manifest from the /pdfs folder and configure the picker
       fetch('/pdfs/manifest.json', { cache: 'no-store' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Manifest not found');
-          }
-          return response.json();
+        .then(res => {
+          if (!res.ok) throw new Error('Manifest not found');
+          return res.json();
         })
         .then(data => {
           const items = Array.isArray(data.items) ? data.items.filter(Boolean) : [];
           if (!items.length) {
-            fallback('No items found in /pdfs/manifest.json.');
+            showWarn('No items found in /pdfs/manifest.json.');
             return;
           }
-          const first = items[0];
-          const pdfPath = first && first.file;
-          if (!pdfPath) {
-            fallback('First manifest item has no "file" path.');
-            return;
-          }
-          setViewer(pdfPath);
+          populate(items);
+          // Load the first PDF by default
+          setViewer(items[0].file);
+          select.addEventListener('change', () => {
+            setViewer(select.value);
+            warn.style.display = 'none';
+          });
         })
         .catch(() => {
-          fallback('Could not load /pdfs/manifest.json.');
+          showWarn('Could not load /pdfs/manifest.json.');
+          // Optionally load a fallback PDF
+          // setViewer('/pdfs/Introduction to Integrals.pdf');
         });
     })();
   </script>
