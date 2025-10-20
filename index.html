@@ -107,12 +107,7 @@
                 View our downloadable resources, lesson samples, and information sheets directly below.
             </p>
             <div class="pdf-viewer-container">
-                <iframe
-                    class="pdf-frame"
-                    src="pdfjs/web/viewer.html?file=../pdfs/sample.pdf#zoom=page-width"
-                    title="EZAF PDF Viewer"
-                    allowfullscreen>
-                </iframe>
+                <iframe id="pdfFrame" class="pdf-frame" title="EZAF PDF Viewer" allowfullscreen></iframe>
             </div>
         </section>
 
@@ -144,5 +139,28 @@
             Support: <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>
         </p>
     </footer>
+
+    <script>
+        // Dynamically load the first PDF from manifest.json
+        fetch("pdfs/manifest.json")
+            .then(response => {
+                if (!response.ok) throw new Error("Manifest not found.");
+                return response.json();
+            })
+            .then(data => {
+                if (!data.items || data.items.length === 0) throw new Error("No items in manifest.");
+                const firstFile = data.items[0].file;
+                const encodedFile = encodeURIComponent(firstFile);
+                const viewerPath = `pdfjs/web/viewer.html?file=..${encodedFile}#zoom=page-width`;
+                document.getElementById("pdfFrame").src = viewerPath;
+            })
+            .catch(err => {
+                document.getElementById("pdfFrame").outerHTML =
+                    `<div style="color:#b42318;text-align:center;padding:20px;">
+                        Error loading PDF: ${err.message}
+                     </div>`;
+                console.error(err);
+            });
+    </script>
 </body>
 </html>
