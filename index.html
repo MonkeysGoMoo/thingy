@@ -1,174 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>My PDFs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E.Z.A.F. Tutoring | Learning Made Simple</title>
+    <!-- Core stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* Fallback inline styling for critical rendering */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1b1c3e;
+            line-height: 1.6;
+            background-color: #fff;
+        }
 
-  <style>
-    :root{
-      --bg:#ffffff; --ink:#101114; --muted:#5f6673; --border:#e3e6ee; --panel:#f7f8fb; --accent:#3b82f6;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--ink); background:var(--bg);
-      font:14.5px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    }
-    .wrap{max-width:1100px; margin:0 auto; padding:24px}
-    header{
-      padding:18px 0 6px; margin-bottom:12px; border-bottom:1px solid var(--border);
-    }
-    h1{
-      margin:0 0 8px; font-size:20px; letter-spacing:.2px;
-    }
-    .muted{color:var(--muted); font-size:13px}
-    .bar{
-      display:flex; flex-wrap:wrap; align-items:center; gap:10px;
-      padding:14px; background:var(--panel); border:1px solid var(--border); border-radius:10px;
-      margin:16px 0 18px;
-    }
-    label{font-weight:600}
-    select, input[type="text"]{
-      min-width:260px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; outline:none;
-      background:#fff;
-    }
-    .btn{
-      padding:8px 12px; border:1px solid var(--border); border-radius:8px; background:#fff; text-decoration:none; color:var(--ink);
-    }
-    .btn.primary{border-color:transparent; background:var(--accent); color:#fff}
-    .note{margin:2px 0 0; color:var(--muted); font-size:12.5px}
-    .viewer{
-      border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#fff;
-      box-shadow:0 4px 18px rgba(0,0,0,.04);
-    }
-    iframe{
-      display:block; width:100%; height:78vh; border:0;
-      background:#fff;
-    }
-    footer{
-      color:var(--muted); font-size:12.5px; text-align:center; padding:18px 0 8px;
-    }
-    @media (max-width:640px){
-      .wrap{padding:16px}
-      iframe{height:72vh}
-    }
-  </style>
+        /* PDF Viewer styling */
+        .pdf-viewer-container {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            border: 1px solid #dcdce8;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .pdf-frame {
+            width: 100%;
+            height: 700px;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>My PDFs</h1>
-      <div class="muted">Pick a file from the list to view it below. Upload new PDFs to <code>/pdfs/</code> and list them in <code>/pdfs/manifest.json</code>.</div>
+    <!-- Hero section with a math-themed background and succinct tagline -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Learning&nbsp;Made&nbsp;Simple</h1>
+            <p>Personalized math &amp; science help for Grades&nbsp;9–12</p>
+            <a href="#contact" class="cta-button">Book Your Free Consultation</a>
+        </div>
     </header>
 
-    <div class="bar" role="region" aria-label="PDF controls">
-      <label for="pdfSelect">Select a file:</label>
-      <select id="pdfSelect" aria-label="Select a PDF to view"></select>
+    <main>
+        <!-- About section introducing the tutoring firm -->
+        <section id="about" class="about-section">
+            <h2>About Us</h2>
+            <p>
+                E.Z.A.F. Tutoring provides one-on-one support in math and the sciences (chemistry,
+                biology and physics) for high school students. Every session is thoughtfully
+                prepared around the student’s needs—lessons are planned in advance and
+                students enjoy an extra 30 minutes of free response time to tackle any
+                schoolwork they find challenging. Our goal is to build confidence and ensure
+                deep understanding, not just memorization.
+            </p>
+        </section>
 
-      <a id="openBtn" class="btn" target="_blank" rel="noopener">Open in new tab</a>
-      <a id="downloadBtn" class="btn" download>Download</a>
+        <!-- Services section outlining what the firm offers -->
+        <section id="services" class="services-section">
+            <h2>What We Offer</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Custom Lessons</h3>
+                    <p>
+                        Lessons are designed specifically for each student, including an
+                        additional 30&nbsp;minutes of free responses for any schoolwork they don’t
+                        understand.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <h3>Flexible Sessions</h3>
+                    <p>
+                        Need more practice on tough problems? Schedule an entire session of free
+                        responses or tailor the structure to fit your learning style.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <h3>Free Consultations</h3>
+                    <p>
+                        New students receive a free consultation to understand their goals and
+                        learning gaps, plus complimentary practice sheets to reinforce their
+                        skills.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-      <span class="muted" id="currentPath" style="margin-left:auto;"></span>
-    </div>
+        <!-- Pricing section to highlight affordability and guarantee -->
+        <section id="pricing" class="pricing-section">
+            <h2>Affordable Pricing</h2>
+            <div class="pricing-card">
+                <h3>$30&nbsp;per&nbsp;session</h3>
+                <p>
+                    Each session includes 1.5&nbsp;hours of instruction and lesson planning.
+                    Enjoy personalised help at an accessible rate.
+                </p>
+                <p>100&nbsp;% satisfaction or your money back.</p>
+            </div>
+        </section>
 
-    <div id="warn" class="muted" style="display:none; margin:0 0 10px;"></div>
+        <!-- Resources section with integrated PDF viewer -->
+        <section id="resources" class="about-section">
+            <h2>Resources & Materials</h2>
+            <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
+                View our downloadable resources, lesson samples, and information sheets directly below.
+            </p>
+            <div class="pdf-viewer-container">
+                <iframe
+                    class="pdf-frame"
+                    src="pdfjs/web/viewer.html?file=../pdfs/sample.pdf#zoom=page-width"
+                    title="EZAF PDF Viewer"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
 
-    <div class="viewer">
-      <iframe
-        id="viewer"
-        title="PDF viewer"
-        src=""
-        allowfullscreen
-      ></iframe>
-    </div>
+        <!-- Contact section with ways to reach the tutor -->
+        <section id="contact" class="contact-section">
+            <h2>Get in Touch</h2>
+            <p>Call or text <a href="tel:+19055147522">(905)&nbsp;514-7522</a> to
+                schedule your first free session.</p>
+            <p>Located in Milton, Ontario. Serving students in person and online.</p>
+            <p>First session is free for new students.</p>
+        </section>
+    </main>
 
+    <!-- Footer with concise tagline -->
     <footer>
-      <div>Simple PDF library · Powered by PDF.js</div>
+        <p>
+            E.Z.A.F. Tutoring — Personalized math &amp; science help for Grades&nbsp;9–12.
+            Learning made simple.
+        </p>
     </footer>
-  </div>
-
-  <script>
-    // Minimal client for manifest + viewer wiring.
-    (function () {
-      const select = document.getElementById('pdfSelect');
-      const iframe = document.getElementById('viewer');
-      const openBtn = document.getElementById('openBtn');
-      const downloadBtn = document.getElementById('downloadBtn');
-      const warn = document.getElementById('warn');
-      const currentPath = document.getElementById('currentPath');
-
-      // Convert a site-relative path to an encoded absolute path for PDF.js ?file=
-      function toEncodedAbs(path) {
-        if (!path) return "";
-        // normalize to absolute
-        if (!path.startsWith('/')) path = '/' + path.replace(/^\/+/, '');
-        // encode but preserve slashes as %2F (PDF.js viewer expects URL-encoded path)
-        return encodeURIComponent(path).replace(/%2F/g, '%2F');
-      }
-
-      function setViewer(path) {
-        if (!path) return;
-
-        // cache-bust the viewer to avoid Netlify/CDN stale cache when you update viewer.html
-        const encoded = toEncodedAbs(path);
-        const viewerUrl = `pdfjs/web/viewer.html?v=5&file=${encoded}#zoom=page-width`;
-        iframe.src = viewerUrl;
-
-        openBtn.href = path;
-        downloadBtn.href = path;
-        const fileName = path.split('/').pop();
-        downloadBtn.download = fileName || 'file.pdf';
-
-        currentPath.textContent = path;
-      }
-
-      function populate(items) {
-        select.innerHTML = '';
-        items.forEach(item => {
-          const opt = document.createElement('option');
-          opt.value = item.file;
-          opt.textContent = item.title || (item.file || '').split('/').pop();
-          select.appendChild(opt);
-        });
-      }
-
-      function fallback(reason) {
-        warn.style.display = 'block';
-        warn.textContent = reason || 'Could not load manifest.json. Add one at /pdfs/manifest.json.';
-        // Try a sensible default if it exists; otherwise show empty list
-        const defaultPath = '/pdfs/Introduction to Integrals.pdf';
-        select.innerHTML = '';
-        const opt = document.createElement('option');
-        opt.value = defaultPath;
-        opt.textContent = defaultPath.split('/').pop();
-        select.appendChild(opt);
-        setViewer(defaultPath);
-      }
-
-      // Load manifest with no-store to avoid stale caching
-      fetch('/pdfs/manifest.json', { cache: 'no-store' })
-        .then(r => {
-          if (!r.ok) throw new Error('Manifest not found');
-          return r.json();
-        })
-        .then(data => {
-          const items = (data && Array.isArray(data.items)) ? data.items.filter(Boolean) : [];
-          if (!items.length) {
-            fallback('No items found in /pdfs/manifest.json. Add entries like { "title": "My Doc", "file": "/pdfs/mydoc.pdf" }.');
-            return;
-          }
-          populate(items);
-          setViewer(select.value);
-          select.addEventListener('change', () => {
-            setViewer(select.value);
-            warn.style.display = 'none';
-          });
-        })
-        .catch(() => {
-          fallback('Could not load /pdfs/manifest.json.');
-        });
-    })();
-  </script>
 </body>
 </html>
