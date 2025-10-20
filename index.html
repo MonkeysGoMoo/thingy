@@ -84,7 +84,7 @@
         <a id="downloadBtn" class="view-link" download>Download</a>
       </div>
 
-      <!-- Inline warning area (no duplicate viewer) -->
+      <!-- Inline warning area -->
       <div id="warn" class="note-warn" style="display:none; text-align:center; margin-bottom:10px;"></div>
 
       <!-- SINGLE viewer -->
@@ -135,7 +135,7 @@
         if (!path) return;
         // ensure absolute path and fully encode for viewer ?file=
         if (!path.startsWith('/')) path = '/' + path.replace(/^\\/+/, '');
-        const encoded = encodeURIComponent(path); // slashes become %2F, spaces %20, etc.
+        const encoded = encodeURIComponent(path); // slashes %2F, spaces %20
         frame.src = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
         openBtn.href = path;
         downloadBtn.href = path;
@@ -168,7 +168,7 @@
         })
         .catch(() => {
           showWarn('Could not load /pdfs/manifest.json.');
-          // Optional fallback if you want to display something anyway:
+          // Optional fallback if you want something displayed anyway:
           // setViewer('/pdfs/Introduction to Integrals.pdf');
         });
     })();
