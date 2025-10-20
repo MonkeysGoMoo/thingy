@@ -5,22 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>E.Z.A.F. Tutoring | Learning Made Simple</title>
 
-  <!-- Load the main stylesheet from the site root. Using an absolute
-       path ensures the CSS is always found regardless of where the
-       page lives on the server. -->
+  <!-- Always load from site root -->
   <link rel="stylesheet" href="/style.css" />
 
-  <!-- Minimal fallback styles to keep the page readable before the
-       external CSS loads. These avoid flashes of unstyled content. -->
+  <!-- Minimal fallback to avoid FOUC -->
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; color: #1b1c3e; background: #fff; }
-    header.hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #4b39b3; color: #fff; }
-    header.hero h1 { font-size: 2.5rem; margin: 0; }
+    body { margin:0; font-family:Arial, sans-serif; color:#1b1c3e; background:#fff; }
+    header.hero { height:60vh; display:flex; align-items:center; justify-content:center; text-align:center; background:#4b39b3; color:#fff; }
+    header.hero h1 { font-size:2.5rem; margin:0; }
   </style>
 </head>
 <body>
-  <!-- Hero section with a prominent headline and call‑to‑action.  The
-       background image is defined in the CSS (via style.css). -->
+  <!-- Hero -->
   <header class="hero">
     <div class="hero-content">
       <h1>Learning&nbsp;Made&nbsp;Simple</h1>
@@ -30,253 +26,150 @@
   </header>
 
   <main>
-    <!-- About section introducing the tutoring firm -->
+    <!-- About -->
     <section id="about" class="about-section">
       <h2>About Us</h2>
       <p>
-        E.Z.A.F. Tutoring provides one-on-one support in math and the
-        sciences (chemistry, biology and physics) for high school students.
-        Every session is thoughtfully prepared around the student’s needs—
-        lessons are planned in advance and students enjoy an extra 30
-        minutes of free response time to tackle any schoolwork they find
-        challenging. Our goal is to build confidence and ensure deep
-        understanding, not just memorization.
+        E.Z.A.F. Tutoring provides one-on-one support in math and the sciences
+        (chemistry, biology and physics) for high school students. Every session
+        is thoughtfully prepared around the student’s needs—lessons are planned
+        in advance and students enjoy an extra 30 minutes of free response time
+        to tackle any schoolwork they find challenging. Our goal is to build
+        confidence and ensure deep understanding, not just memorization.
       </p>
     </section>
 
-    <!-- Services section outlining what the firm offers -->
+    <!-- Services -->
     <section id="services" class="services-section">
       <h2>What We Offer</h2>
       <div class="service-grid">
         <div class="service-card">
           <h3>Custom Lessons</h3>
-          <p>
-            Lessons are designed specifically for each student, including
-            an additional 30&nbsp;minutes of free responses for any schoolwork
-            they don’t understand.
-          </p>
+          <p>Lessons are designed specifically for each student, including an additional 30&nbsp;minutes of free responses for any schoolwork they don’t understand.</p>
         </div>
         <div class="service-card">
           <h3>Flexible Sessions</h3>
-          <p>
-            Need more practice on tough problems? Schedule an entire
-            session of free responses or tailor the structure to fit your
-            learning style.
-          </p>
+          <p>Need more practice on tough problems? Schedule an entire session of free responses or tailor the structure to fit your learning style.</p>
         </div>
         <div class="service-card">
           <h3>Free Consultations</h3>
-          <p>
-            New students receive a free consultation to understand their
-            goals and learning gaps, plus complimentary practice sheets to
-            reinforce their skills.
-          </p>
+          <p>New students receive a free consultation to understand their goals and learning gaps, plus complimentary practice sheets to reinforce their skills.</p>
         </div>
       </div>
     </section>
 
-    <!-- Pricing section to highlight affordability and guarantee -->
+    <!-- Pricing -->
     <section id="pricing" class="pricing-section">
       <h2>Affordable Pricing</h2>
       <div class="pricing-card">
         <h3>$30&nbsp;per&nbsp;session</h3>
-        <p>
-          Each session includes 1.5&nbsp;hours of instruction and lesson
-          planning. Enjoy personalised help at an accessible rate.
-        </p>
+        <p>Each session includes 1.5&nbsp;hours of instruction and lesson planning. Enjoy personalised help at an accessible rate.</p>
         <p>100&nbsp;% satisfaction or your money back.</p>
       </div>
     </section>
 
-    <!-- Resources section with integrated PDF viewer -->
-  <section id="resources" class="about-section">
-  <h2>Resources &amp; Materials</h2>
-  <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
-    View our downloadable resources, lesson samples, and information sheets below.
-  </p>
+    <!-- Resources with ONE viewer + dropdown -->
+    <section id="resources" class="about-section">
+      <h2>Resources &amp; Materials</h2>
+      <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
+        View our downloadable resources, lesson samples, and information sheets below.
+      </p>
 
-  <!-- 📘 Dropdown and buttons -->
-  <div class="pdf-picker">
-    <label for="pdfSelect">Select a file:</label>
-    <select id="pdfSelect"></select>
+      <!-- Dropdown + actions -->
+      <div class="pdf-picker">
+        <label for="pdfSelect">Select a file:</label>
+        <select id="pdfSelect" aria-label="Select a PDF to view"></select>
 
-    <a id="openBtn" class="view-link" target="_blank" rel="noopener">Open in new tab</a>
-    <a id="downloadBtn" class="view-link" download>Download</a>
-  </div>
+        <a id="openBtn" class="view-link" target="_blank" rel="noopener">Open in new tab</a>
+        <a id="downloadBtn" class="view-link" download>Download</a>
+      </div>
 
-  <!-- 📖 PDF viewer -->
-  <div class="pdf-viewer-container">
-    <iframe
-      class="pdf-frame"
-      id="pdfFrame"
-      title="EZAF PDF Viewer"
-      allowfullscreen>
-    </iframe>
-  </div>
-</section>
+      <!-- Inline warning area (no duplicate viewer) -->
+      <div id="warn" class="note-warn" style="display:none; text-align:center; margin-bottom:10px;"></div>
 
-<script>
-  (function () {
-    const select = document.getElementById('pdfSelect');
-    const frame = document.getElementById('pdfFrame');
-    const openBtn = document.getElementById('openBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-
-    function setViewer(path) {
-      if (!path) return;
-      const encoded = encodeURIComponent(path).replace(/%2F/g, '%2F');
-      frame.src = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
-      openBtn.href = path;
-      downloadBtn.href = path;
-      downloadBtn.download = path.split('/').pop();
-    }
-
-    function populate(items) {
-      select.innerHTML = '';
-      items.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.file;
-        opt.textContent = item.title || item.file.split('/').pop();
-        select.appendChild(opt);
-      });
-    }
-
-    // Load manifest
-    fetch('/pdfs/manifest.json', { cache: 'no-store' })
-      .then(res => res.json())
-      .then(data => {
-        const items = (data && Array.isArray(data.items)) ? data.items.filter(Boolean) : [];
-        if (!items.length) {
-          select.innerHTML = '<option>No PDFs found</option>';
-          return;
-        }
-        populate(items);
-        setViewer(items[0].file);
-        select.addEventListener('change', () => setViewer(select.value));
-      })
-      .catch(() => {
-        select.innerHTML = '<option>Could not load manifest.json</option>';
-      });
-  })();
-</script>
-
-      <!-- A container for error messages if the manifest is missing -->
-      <div id="warn" class="note-warn" style="display:none;"></div>
+      <!-- SINGLE viewer -->
       <div class="pdf-viewer-container">
-        <iframe id="pdfFrame" class="pdf-frame" title="EZAF PDF Viewer" allowfullscreen></iframe>
+        <iframe
+          class="pdf-frame"
+          id="pdfFrame"
+          title="EZAF PDF Viewer"
+          allowfullscreen>
+        </iframe>
       </div>
     </section>
 
-    <!-- Contact section with ways to reach the tutor -->
+    <!-- Contact -->
     <section id="contact" class="contact-section">
       <h2>Get in Touch</h2>
-      <p>Call or text <a href="tel:+19055147522">(905)&nbsp;514-7522</a> to
-        schedule your first free session.</p>
-      <p>Email us anytime at 
-        <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a>
-        for general inquiries or lesson information.
-      </p>
-      <p>For technical assistance or platform-related issues, contact
-        <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>.
-      </p>
+      <p>Call or text <a href="tel:+19055147522">(905)&nbsp;514-7522</a> to schedule your first free session.</p>
+      <p>Email us anytime at <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a> for general inquiries or lesson information.</p>
+      <p>For technical assistance or platform-related issues, contact <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>.</p>
       <p>Located in Milton, Ontario. Serving students in person and online.</p>
       <p>First session is free for new students.</p>
     </section>
   </main>
 
-  <!-- Footer with a concise tagline and contact info -->
+  <!-- Footer -->
   <footer>
-    <p>
-      E.Z.A.F. Tutoring — Personalized math &amp; science help for
-      Grades&nbsp;9–12. Learning made simple.
-    </p>
-    <p>
-      Contact: <a href="mailto:pierreibrahim@ezaftutoring.com">pierreibrahim@ezaftutoring.com</a> |
-      Support: <a href="mailto:support@ezaftutoring.com">support@ezaftutoring.com</a>
-    </p>
+    <div class="footer-content">
+      <p class="footer-brand">
+        E.Z.A.F. Tutoring — Personalized math &amp; science help for Grades&nbsp;9–12. Learning made simple.
+      </p>
+      <div class="footer-links">
+        <a href="mailto:pierreibrahim@ezaftutoring.com">Contact</a>
+        <a href="mailto:support@ezaftutoring.com">Support</a>
+      </div>
+    </div>
   </footer>
 
-  <!-- JavaScript to dynamically load the first PDF from the manifest -->
+  <!-- ONE script controls the ONE viewer -->
   <script>
     (function () {
+      const select = document.getElementById('pdfSelect');
       const frame = document.getElementById('pdfFrame');
+      const openBtn = document.getElementById('openBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
       const warn = document.getElementById('warn');
 
-      /**
-       * Convert a PDF path into a URL-encoded absolute path for PDF.js.
-       * Ensure the path begins with a leading slash and encode all
-       * characters (including slashes) via encodeURIComponent so they
-       * become %2F and %20 etc. This form is what the viewer expects.
-       *
-       * @param {string} path The raw path from the manifest.
-       * @returns {string} A fully encoded path ready for use in the
-       * query parameter.
-       */
-      function toEncodedAbs(path) {
-        if (!path) return '';
-        // Prefix with a slash if necessary
-        // Ensure the path starts with a single slash.  If it already
-        // starts with '/', leave it unchanged. Otherwise, prefix it.
-        if (!path.startsWith('/')) {
-          path = '/' + path;
+      function setViewer(path) {
+        if (!path) return;
+        // ensure absolute path and fully encode for viewer ?file=
+        if (!path.startsWith('/')) path = '/' + path.replace(/^\\/+/, '');
+        const encoded = encodeURIComponent(path); // slashes become %2F, spaces %20, etc.
+        frame.src = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
+        openBtn.href = path;
+        downloadBtn.href = path;
+        downloadBtn.download = path.split('/').pop() || 'file.pdf';
+      }
+
+      function populate(items) {
+        select.innerHTML = '';
+        for (const item of items) {
+          const opt = document.createElement('option');
+          opt.value = item.file;
+          opt.textContent = item.title || (item.file || '').split('/').pop();
+          select.appendChild(opt);
         }
-        return encodeURIComponent(path);
       }
 
-      /**
-       * Set the PDF.js viewer iframe to load the specified PDF file.
-       * The viewer lives in the /pdfjs directory (viewer.html) and
-       * accepts the encoded file path in the query parameter.
-       *
-       * @param {string} pdfPath The raw path to the PDF (e.g.
-       * '/pdfs/Introduction to Integrals.pdf').
-       */
-      function setViewer(pdfPath) {
-        if (!pdfPath) return;
-        const encoded = toEncodedAbs(pdfPath);
-        const viewerUrl = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
-        frame.src = viewerUrl;
-      }
-
-      /**
-       * Display an error message in the resources section and fall back
-       * to a default PDF. If the manifest fails to load, this function
-       * ensures the viewer still displays something meaningful.
-       *
-       * @param {string} reason A message describing the error.
-       */
-      function fallback(reason) {
+      function showWarn(msg) {
         warn.style.display = 'block';
-        warn.textContent = reason || 'Could not load /pdfs/manifest.json.';
-        // Try to load the Introduction to Integrals PDF if present
-        const defaultPath = '/pdfs/Introduction to Integrals.pdf';
-        setViewer(defaultPath);
+        warn.textContent = msg;
       }
 
-      // Fetch the manifest from the /pdfs folder and load the first item
       fetch('/pdfs/manifest.json', { cache: 'no-store' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Manifest not found');
-          }
-          return response.json();
-        })
+        .then(r => { if (!r.ok) throw new Error('Manifest not found'); return r.json(); })
         .then(data => {
           const items = Array.isArray(data.items) ? data.items.filter(Boolean) : [];
-          if (!items.length) {
-            fallback('No items found in /pdfs/manifest.json.');
-            return;
-          }
-          const first = items[0];
-          const pdfPath = first && first.file;
-          if (!pdfPath) {
-            fallback('First manifest item has no "file" path.');
-            return;
-          }
-          setViewer(pdfPath);
+          if (!items.length) { showWarn('No items found in /pdfs/manifest.json.'); return; }
+          populate(items);
+          setViewer(items[0].file);
+          select.addEventListener('change', () => { setViewer(select.value); warn.style.display = 'none'; });
         })
         .catch(() => {
-          fallback('Could not load /pdfs/manifest.json.');
+          showWarn('Could not load /pdfs/manifest.json.');
+          // Optional fallback if you want to display something anyway:
+          // setViewer('/pdfs/Introduction to Integrals.pdf');
         });
     })();
   </script>
