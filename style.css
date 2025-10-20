@@ -20,39 +20,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
-.pdf-picker {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin: 0 auto 1.5rem;
-  max-width: 900px;
-}
-
-.pdf-picker select {
-  min-width: 260px;
-  padding: 8px 10px;
-  border: 1px solid #dcdce8;
-  border-radius: 6px;
-  background: #ffffff;
-  color: var(--color-text-dark);
-  font-size: 0.95rem;
-}
-
-.pdf-picker a.view-link {
-  display: inline-block;
-  padding: 8px 12px;
-  border: 1px solid #dcdce8;
-  border-radius: 6px;
-  text-decoration: none;
-  color: var(--color-primary);
-}
-
-.pdf-picker a.view-link:hover {
-  background-color: var(--color-accent);
-  color: var(--color-text-dark);
-}
 
 body {
     margin: 0;
@@ -318,49 +285,4 @@ footer p {
     .service-grid {
         gap: 1rem;
     }
-}/* Footer styling fix */
-footer {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
-  text-align: center;
-  padding: 1rem 1.5rem;
-  margin-top: 4rem;
 }
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.footer-brand {
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.footer-links {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: var(--color-text-light);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-  color: var(--color-accent);
-}
-
-@media (max-width: 600px) {
-  .footer-links {
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-}
-
