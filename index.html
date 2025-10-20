@@ -89,12 +89,77 @@
     </section>
 
     <!-- Resources section with integrated PDF viewer -->
-    <section id="resources" class="about-section">
-      <h2>Resources &amp; Materials</h2>
-      <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
-        View our downloadable resources, lesson samples, and information
-        sheets directly below.
-      </p>
+  <section id="resources" class="about-section">
+  <h2>Resources &amp; Materials</h2>
+  <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
+    View our downloadable resources, lesson samples, and information sheets below.
+  </p>
+
+  <!-- 📘 Dropdown and buttons -->
+  <div class="pdf-picker">
+    <label for="pdfSelect">Select a file:</label>
+    <select id="pdfSelect"></select>
+
+    <a id="openBtn" class="view-link" target="_blank" rel="noopener">Open in new tab</a>
+    <a id="downloadBtn" class="view-link" download>Download</a>
+  </div>
+
+  <!-- 📖 PDF viewer -->
+  <div class="pdf-viewer-container">
+    <iframe
+      class="pdf-frame"
+      id="pdfFrame"
+      title="EZAF PDF Viewer"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const select = document.getElementById('pdfSelect');
+    const frame = document.getElementById('pdfFrame');
+    const openBtn = document.getElementById('openBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    function setViewer(path) {
+      if (!path) return;
+      const encoded = encodeURIComponent(path).replace(/%2F/g, '%2F');
+      frame.src = `/pdfjs/viewer.html?file=${encoded}#zoom=page-width`;
+      openBtn.href = path;
+      downloadBtn.href = path;
+      downloadBtn.download = path.split('/').pop();
+    }
+
+    function populate(items) {
+      select.innerHTML = '';
+      items.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.file;
+        opt.textContent = item.title || item.file.split('/').pop();
+        select.appendChild(opt);
+      });
+    }
+
+    // Load manifest
+    fetch('/pdfs/manifest.json', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        const items = (data && Array.isArray(data.items)) ? data.items.filter(Boolean) : [];
+        if (!items.length) {
+          select.innerHTML = '<option>No PDFs found</option>';
+          return;
+        }
+        populate(items);
+        setViewer(items[0].file);
+        select.addEventListener('change', () => setViewer(select.value));
+      })
+      .catch(() => {
+        select.innerHTML = '<option>Could not load manifest.json</option>';
+      });
+  })();
+</script>
+
       <!-- A container for error messages if the manifest is missing -->
       <div id="warn" class="note-warn" style="display:none;"></div>
       <div class="pdf-viewer-container">
